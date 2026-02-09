@@ -15,7 +15,17 @@ import '../core/native_adapter_instance.dart';
 import '../core/sph/sph.dart';
 import '../utils/file_operations.dart';
 
-//TODO: Make sure, the URL checks are not vulnerable to malformed URLs. Maybe use regex or Uri parsing instead of string contains.
+/// Checks if the given URI's host ends with the specified domain suffix.
+/// This is secure against URL manipulation attacks.
+bool _isHostMatch(Uri uri, String domainSuffix) {
+  final host = uri.host.toLowerCase();
+  return host == domainSuffix || host.endsWith('.$domainSuffix');
+}
+
+/// Checks if the URI is a schulportal.hessen.de domain.
+bool _isSchulportalDomain(Uri uri) {
+  return _isHostMatch(uri, 'schulportal.hessen.de');
+}
 
 class MoodleWebView extends StatefulWidget {
   const MoodleWebView({super.key});
@@ -84,6 +94,20 @@ class _MoodleWebViewState extends State<MoodleWebView> {
       final jar = CookieJar();
       dio.httpClientAdapter = getNativeAdapterInstance();
       dio.options.followRedirects = false;
+      dio.interceptors.add(
+        InterceptorsWrapper(
+          onResponse: (Response response, ResponseInterceptorHandler handler) {
+            response.headers.forEach((name, values) {
+              if (name.toLowerCase() == "set-cookie") {
+                for (var i = 0; i < values.length; i++) {
+                  values[i] = values[i].replaceAll("HttpOnly=1", "HttpOnly");
+                }
+              }
+            });
+            return handler.next(response);
+          },
+        ),
+      );
       dio.interceptors.add(dio_plugin.CookieManager(jar));
 
       final lastSchoolCookie = dio_core.Cookie(
@@ -278,17 +302,21 @@ class _MoodleWebViewState extends State<MoodleWebView> {
                   error = null;
 
                   final WebUri uri = navigationAction.request.url!;
+                  final parsedUri = Uri.tryParse(uri.rawValue);
 
-                  if (uri.rawValue.contains(
-                        ".schulportal.hessen.de/login/logout.php",
-                      ) ||
-                      uri.rawValue.contains(
-                        ".schulportal.hessen.de/index.php?logout=all",
-                      )) {
+                  // Block logout URLs (secure host + path check)
+                  if (parsedUri != null &&
+                      _isSchulportalDomain(parsedUri) &&
+                      (parsedUri.path == '/login/logout.php' ||
+                          (parsedUri.path == '/index.php' &&
+                              parsedUri.queryParameters['logout'] == 'all'))) {
                     return NavigationActionPolicy.CANCEL;
                   }
 
-                  if (uri.rawValue.contains('start.schulportal.hessen.de')) {
+                  // Handle start.schulportal.hessen.de navigation
+                  if (parsedUri != null &&
+                      parsedUri.host.toLowerCase() ==
+                          'start.schulportal.hessen.de') {
                     setState(() {
                       showWebView = false;
                     });
@@ -296,7 +324,8 @@ class _MoodleWebViewState extends State<MoodleWebView> {
                     return NavigationActionPolicy.CANCEL;
                   }
 
-                  if (!uri.rawValue.contains(".schulportal.hessen.de")) {
+                  // Open external URLs in browser
+                  if (parsedUri == null || !_isSchulportalDomain(parsedUri)) {
                     await launchUrl(uri);
 
                     return NavigationActionPolicy.CANCEL;

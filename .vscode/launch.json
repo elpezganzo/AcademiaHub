@@ -8,7 +8,8 @@
             "program": "lib/main.dart",
             "args": [
                 "--no-enable-impeller",
-                "--dart-define=cronetHttpNoPlay=true"
+                "--dart-define=cronetHttpNoPlay=true",
+                "--dart-define=ANSI=true"
             ],
             "flutterMode": "debug",
             //"deviceId": "all"
@@ -20,7 +21,8 @@
             "program": "lib/main.dart",
             "args": [
                 "--no-enable-impeller",
-                "--dart-define=cronetHttpNoPlay=true"
+                "--dart-define=cronetHttpNoPlay=true",
+                "--dart-define=ANSI=true"
             ],
             "flutterMode": "profile",
             //"deviceId": "all"

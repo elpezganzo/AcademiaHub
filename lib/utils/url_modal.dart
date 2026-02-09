@@ -36,52 +36,54 @@ Future<UrlModalResponse> openUrlModal(BuildContext context, Uri uri) async {
     logger.w('Untrusted URL: $uri');
   }
 
-  open = await showDialog<bool>(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text(AppLocalizations.of(context).openExternalUrl),
-      content: Column(
-        mainAxisSize: .min,
-        spacing: 8,
-        children: [
-          Text(AppLocalizations.of(context).openExternalUrlDescription),
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.secondary,
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Padding(
-              padding: EdgeInsetsGeometry.all(4.0),
-              child: Text(
-                uri.toString(),
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondary,
+  if (open == null || !open) {
+    open = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(AppLocalizations.of(context).openExternalUrl),
+        content: Column(
+          mainAxisSize: .min,
+          spacing: 8,
+          children: [
+            Text(AppLocalizations.of(context).openExternalUrlDescription),
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Padding(
+                padding: EdgeInsetsGeometry.all(4.0),
+                child: Text(
+                  uri.toString(),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  ),
                 ),
               ),
             ),
+          ],
+        ),
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: uri.toString()));
+              Navigator.of(context).pop(false);
+            },
+            icon: Icon(Icons.copy),
+            label: Text(AppLocalizations.of(context).copy),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Open'),
           ),
         ],
       ),
-      actions: [
-        TextButton.icon(
-          onPressed: () {
-            Clipboard.setData(ClipboardData(text: uri.toString()));
-            Navigator.of(context).pop(false);
-          },
-          icon: Icon(Icons.copy),
-          label: Text(AppLocalizations.of(context).copy),
-        ),
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(true),
-          child: const Text('Open'),
-        ),
-      ],
-    ),
-  );
+    );
+  }
 
   if (open == null || !open) {
     return UrlModalResponse.dismissed;

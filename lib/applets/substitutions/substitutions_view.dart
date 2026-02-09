@@ -9,7 +9,6 @@ import 'package:lanis/applets/substitutions/substitutions_filter_settings.dart';
 import 'package:lanis/applets/substitutions/substitutions_listtile.dart';
 import 'package:lanis/models/substitution.dart';
 import 'package:lanis/utils/cached_network_image.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/sph/sph.dart';
 import '../../utils/url_modal.dart';

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:linkify/linkify.dart';
 import 'package:styled_text/styled_text.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import '../utils/logger.dart';
 import '../utils/url_modal.dart';
 
 class FormatPattern {
@@ -359,10 +356,7 @@ class FormattedText extends StatelessWidget {
               padding: const EdgeInsets.only(top: 2, bottom: 2),
               child: InkWell(
                 onTap: () async {
-                  await openUrlModal(
-                    context,
-                    Uri.parse(attributes["href"]!),
-                  );
+                  await openUrlModal(context, Uri.parse(attributes["href"]!));
                 },
                 borderRadius: BorderRadius.circular(6),
                 child: Container(
