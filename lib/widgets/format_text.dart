@@ -4,6 +4,7 @@ import 'package:styled_text/styled_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/logger.dart';
+import '../utils/url_modal.dart';
 
 class FormatPattern {
   late final RegExp regExp;
@@ -358,11 +359,10 @@ class FormattedText extends StatelessWidget {
               padding: const EdgeInsets.only(top: 2, bottom: 2),
               child: InkWell(
                 onTap: () async {
-                  if (!await launchUrl(Uri.parse(attributes["href"]!))) {
-                    logger.w(
-                      '${attributes["href"]} konnte nicht geöffnet werden.',
-                    );
-                  }
+                  await openUrlModal(
+                    context,
+                    Uri.parse(attributes["href"]!),
+                  );
                 },
                 borderRadius: BorderRadius.circular(6),
                 child: Container(

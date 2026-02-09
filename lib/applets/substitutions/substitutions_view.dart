@@ -12,6 +12,7 @@ import 'package:lanis/utils/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/sph/sph.dart';
+import '../../utils/url_modal.dart';
 import '../../widgets/combined_applet_builder.dart';
 
 class SubstitutionsView extends StatefulWidget {
@@ -182,7 +183,10 @@ class _SubstitutionsViewState extends State<SubstitutionsView>
                       child: HtmlWidget(
                         info.values.join('<br>'),
                         renderMode: RenderMode.column,
-                        onTapUrl: (url) => launchUrl(Uri.parse(url)),
+                        onTapUrl: (url) {
+                          openUrlModal(context, Uri.parse(url));
+                          return true;
+                        },
                         customStylesBuilder: (element) {
                           if (element.localName == 'a' &&
                               element.attributes['style'] != null) {

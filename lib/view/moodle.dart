@@ -15,6 +15,8 @@ import '../core/native_adapter_instance.dart';
 import '../core/sph/sph.dart';
 import '../utils/file_operations.dart';
 
+//TODO: Make sure, the URL checks are not vulnerable to malformed URLs. Maybe use regex or Uri parsing instead of string contains.
+
 class MoodleWebView extends StatefulWidget {
   const MoodleWebView({super.key});
 
