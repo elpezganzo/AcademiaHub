@@ -1,92 +1,60 @@
-# Lanis Mobile
+# Academy Hub
 
+**Your app for the global school portal – 100 % configurable for any educational system.**  
 
-Deine App für das hessische Schulportal! In Zusammenarbeit mit dem staatlichen Schulamt für den Landkreis Groß-Gerau und den Main-Taunus-Kreis
-**Einsatz an zahlreichen Schulen in Hessen mit über 15K Nutzern**
+A fully customizable, open‑source replacement for Lanis Mobile, rebuilt to serve academies, schools, and districts around the world.
 
-<p align="center">
-    <img src="https://github.com/alessioC42/lanis-mobile/assets/84250128/19d30436-32f7-4cbe-b78e-f2fee3583c28" width="60%">
-</p>
+---
 
-<table>
-    <tr>
-        <td colspan='2'>
-            <a href='https://play.google.com/store/apps/details?id=io.github.alessioc42.sph&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Jetzt bei Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/de_badge_web_generic.png' style='height: 71px'/></a>
-        </td>
-        <td colspan='2'>
-            <a href="https://apt.izzysoft.de/fdroid/index/apk/io.github.alessioc42.sph"><img src="https://www.martinstoeckli.ch/images/izzy-on-droid-badge-en.png" alt="Get it on IzzyOnDroid" style="height: 56px;"></a>
-        </td>
-        <td colspan='2'>
-            <a href='https://apps.apple.com/de/app/lanis-mobile/id6511247743?l=en-GB'><img alt='Jetzt im App Store' src='https://lanis-mobile.github.io/assets/ios-badge.svg' style='height: 61px'/></a>
-        </td>
-    </tr>
-    <tr>
-        <td colspan='3'>
-            <a href='https://lanis-mobile.github.io/'>website</a>
-        </td>
-        <td colspan='3'>
-            <a href='https://discord.gg/MGYaSetUsY'>discord</a>
-        </td>
-    </tr>
-</table>
+## 📚 Overview
 
-<p></p>
-<details>
-  <summary>Screenshots</summary>
-<div style="text-align: center;">
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/01.png" width="250" >
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/02.png" width="250" >
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/03.png" width="250" >
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/04.png" width="250" >
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/05.png" width="250" >
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/06.png" width="250" >
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/07.png" width="250" >
+Academy Hub provides a modular suite of tools:
 
-</div>
-</details>
+- **Dashboard** – personalized home screen with announcements, timetables, grades, and quick actions.  
+- **Timetable & Scheduling** – flexible period lengths, holiday calendars, room booking.  
+- **Learning Management** – courses, assignments, quizzes, and grading schemes that you define.  
+- **Communication** – secure messaging, push notifications, discussion boards.  
+- **Attendance & Behaviour** – sign‑in/out, absence tracking, behaviour logs.  
+- **Grades & Reporting** – custom weighting, printable reports, export to PDF/CSV.  
+- **Finance & Billing** – tuition, cafeteria accounts, library fines, multi‑currency support.  
+- **Library & Resources** – catalog search, e‑book lending, reservation system.  
+- **Extracurricular & Events** – clubs, sports, field trips, voting.  
+- **Analytics & Insights** – usage stats, performance trends, predictive alerts.  
+- **Integrations** – SIS, HR, ERP, third‑party content providers (YouTube, Khan Academy, …).
 
-## Mitarbeit
-Dieses Projekt ist stark von Bug-Reports anderer Schulen oder von neuen Mitarbeitern abhängig. Der Grund dafür liegt in
-der modularen Natur des Schulportals, die es äußerst schwierig macht, eine universelle Lanis-App zu entwickeln.
+Every module is driven by a **declarative configuration file (JSON/YAML)**, allowing schools to adapt the app without writing code.
 
-Scheue dich nicht, einen Bug-Report zu erstellen, wenn du einen Fehler findest. Wir sind immer offen für neue Mitarbeiter/Schüler, die mit uns arbeiten, um die App zu verbessern.
+---
 
-Bug-Reports können auch an <a href="mailto:lanis-mobile@alessioc42.dev">diese</a> E-Mail-Adresse gesendet werden, falls kein Github-Konto vorhanden ist.
+## 🛠️ Technical Stack
 
-## Get started with development
-### 1. [Setup Flutter](https://docs.flutter.dev/get-started/quick) with your favourite IDE (Android Studio / VScode recommended)
+- **Front‑end:** Flutter (iOS, Android, Web, Desktop) – UI built dynamically from the configuration schema.  
+- **Back‑end:** Cloud‑native microservices (Node.js / Go) behind a GraphQL gateway.  
+- **Database:** PostgreSQL (relational data) + Redis (caching) + encrypted blob storage for documents.  
+- **Security:** End‑to‑end encryption, fine‑grained RBAC, immutable audit logs, GDPR/FED‑RA/FERPA compliance.  
+- **Deployment Options:** SaaS (hosted on Proton Cloud), Hybrid (cloud core + on‑prem data), or Fully on‑prem (Docker/Kubernetes bundle).  
 
-### 2. Generate the code 
-*You do not need to do this, if you cloned the repository freshly, since we have this checked into source control*
-```shell
-dart run build_runner build # Database
-dart run intl_utils:generate # Localisations
-```
-### 3. Development
-Note the flags here:
-#### `--dart-define=cronetHttpNoPlay=true`
-**[Partially optional]**
-This flag is used to include the Cronet binary for networking on non-Play-Services-enabled devices (we also ship this version on the Play Store)
+---
 
-If you are currently using the default Android emulator image, consider using an AOSP image instead, as these tend to perform much better than versions with Play Services enabled.
+## 🎨 Customisation Example
 
-On iOS builds this flag is not required.
+```yaml
+dashboard:
+  layout:
+    - widget: announcements
+      position: top
+    - widget: timetable
+      position: left
+    - widget: grades_overview
+      position: right
+  theme:
+    primaryColor: "#0047AB"
+    logoUrl: "https://example.edu/logo.png"
 
-#### `--dart-define=ANSI=true` 
-**[Optional]**
-This flag allows the application's logs to be colorized, which can help a lot if you are not already using your IDE's log-filtering tools. (Recommended to omit on macOS due to lack of support in the default Terminal)
-
-```shell
-flutter run --dart-define=cronetHttpNoPlay=true --dart-define=ANSI=true
-```
-
-### 4. Production
-For actual release mode signing is required, which can be added via placing the respective `key.properties` and `local.properties` in the `android` directory. On iOS the Development team has to be changed in Xcode. 
-
-If you are producing a build that you intend to distribute to other people, please consider changing the app ID from `io.github.alessioc42.sph` to `io.github.alessioc42.sph.<fork|dev>.<YOUR_NAME>` or any other name that is different from the original app ID. This will prevent conflicts with the store versions that we are publishing.
-
-```shell
-flutter build <apk|aab|ipa> --release --dart-define=cronetHttpNoPlay=true
-```
-
-An alternative is the `build.sh` script, which builds the android binarys when on linux and the macOS binarys when on macOS and opens the file manager with the build output when complete.
+timetable:
+  periodLengthMinutes: 45
+  weekPattern: ["Mon","Tue","Wed","Thu","Fri"]
+  holidays:
+    - start: "2026-04-01"
+      end: "2026-04-10"
+      label: "Spring Break"
